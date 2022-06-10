@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shop_app/screens/forgot_password/forgot_password_screen.dart';
 
 import '../../../components/custom_surffix_icon.dart';
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
 import '../../../constants.dart';
 import '../../../size_config.dart';
+import '../../login_success/login_success_screen.dart';
 
 class SignForm extends StatefulWidget {
   @override
@@ -39,9 +41,13 @@ class _SignFormState extends State<SignForm> {
             ),
             Text("Remember me"),
             Spacer(),
-            Text(
-              "Forgot Password",
-              style: TextStyle(decoration: TextDecoration.underline),
+            GestureDetector(
+              onTap: () => Navigator.pushNamed(
+                context, ForgotPasswordScreen.routeName),
+              child: Text(
+                "Forgot Password",
+                style: TextStyle(decoration: TextDecoration.underline),
+              ),
             ),
           ],
         ),
@@ -52,6 +58,8 @@ class _SignFormState extends State<SignForm> {
           press: () {
             if (_formKey.currentState?.validate() == true) {
               _formKey.currentState?.save();
+              // if all are valid then we go to success screen
+              Navigator.pushNamed(context, LoginSuccessScreen.routeName);
             }
           },
         ),
@@ -80,11 +88,13 @@ class _SignFormState extends State<SignForm> {
             setState(() {
               errors.add(kPassNullError);
             });
+            return "";
           } else if ((value?.length ?? 0) < 8 &&
               !errors.contains(kShortPassError)) {
                 setState(() {
                   errors.add(kShortPassError);
                 });
+                return "";
               }
           return null;
         },
@@ -121,11 +131,13 @@ class _SignFormState extends State<SignForm> {
             setState(() {
               errors.add(kEmailNullError);
             });
+            return "";
           } else if (!emailValidatorRegExp.hasMatch(value ?? "") &&
               !errors.contains(kInvalidEmailError)) {
                 setState(() {
                   errors.add(kInvalidEmailError);
                 });
+                return "";
               }
           return null;
         },
