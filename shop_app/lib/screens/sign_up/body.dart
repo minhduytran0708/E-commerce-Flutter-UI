@@ -57,7 +57,7 @@ class Body extends StatelessWidget {
               Text(
                 "By continuing your confirm that you agree \nwith our Term and Condition",
                 textAlign: TextAlign.center,
-              )
+              ),
             ],
           ),
         ),

@@ -63,9 +63,10 @@ class _SignUpFormState extends State<SignUpForm> {
           obscureText: true,
           onSaved: (newValue) => confirm_password = newValue,
           onChanged: (value) {
-            if (password == confirm_password) {
+            if (password == value) {
               removeError(error: kMatchPassError);
             }
+            confirm_password = value;
             return null;
           },
           validator: (value) {
@@ -125,13 +126,14 @@ class _SignUpFormState extends State<SignUpForm> {
   TextFormField buildEmailFormField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => email,
+      onSaved: (newValue) => email = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kEmailNullError);
         } else if (emailValidatorRegExp.hasMatch(value)) {
           removeError(error: kInvalidEmailError);
         }
+        email = value;
         return null;
       },
       validator: (value) {
