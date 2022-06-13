@@ -5,6 +5,7 @@ import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
 import '../../../constants.dart';
 import '../../../size_config.dart';
+import '../../complete_profile/complete_profile_screen.dart';
 
 class SignUpForm extends StatefulWidget {
   @override
@@ -50,6 +51,7 @@ class _SignUpFormState extends State<SignUpForm> {
             press: () {
               if (_formKey.currentState?.validate() == true) {
                 // Go to complete profile page
+                Navigator.pushNamed(context, CompleteProfileScreen.routeName);
               }
             },
           )
@@ -66,13 +68,12 @@ class _SignUpFormState extends State<SignUpForm> {
             if (password == value) {
               removeError(error: kMatchPassError);
             }
-            confirm_password = value;
             return null;
           },
           validator: (value) {
             if (value?.isEmpty == true) {
               return "";
-            } else if (password != confirm_password) {
+            } else if (password != value) {
               addError(error: kMatchPassError);
               return "";
             }
@@ -133,7 +134,6 @@ class _SignUpFormState extends State<SignUpForm> {
         } else if (emailValidatorRegExp.hasMatch(value)) {
           removeError(error: kInvalidEmailError);
         }
-        email = value;
         return null;
       },
       validator: (value) {
