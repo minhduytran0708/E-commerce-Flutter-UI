@@ -3,18 +3,40 @@ import 'package:shop_app/constants.dart';
 import 'package:shop_app/size_config.dart';
 
 import '../../../models/Product.dart';
+import 'product_description.dart';
+import 'product_images.dart';
+import 'top_rounded_container.dart';
 
 class Body extends StatelessWidget {
   final Product product;
 
   const Body({Key? key, required this.product}) : super(key: key);
   Widget build(BuildContext context) {
-    return ProductImages(product: product);
+    return Column(
+      children: [
+        ProductImages(product: product),
+        TopRoundedContainer(
+          color: Colors.white,
+          child: Column(
+            children: [
+              ProductDescription(
+                product: product,
+                pressOnMore: () {},
+              ),
+              TopRoundedContainer(
+                color: Color(0xFFF6F7F9),
+                child: ColorDots(product: product),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }
 
-class ProductImages extends StatefulWidget {
-  const ProductImages({
+class ColorDots extends StatelessWidget {
+  const ColorDots({
     Key? key,
     required this.product,
   }) : super(key: key);
@@ -22,53 +44,55 @@ class ProductImages extends StatefulWidget {
   final Product product;
 
   @override
-  State<ProductImages> createState() => _ProductImagesState();
-}
-
-class _ProductImagesState extends State<ProductImages> {
-  int selectedImage = 0;
-  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          width: getProportionateScreenWidth(238),
-          child: AspectRatio(
-            aspectRatio: 1,
-            child: Image.asset(widget.product.images[0]),
+    int selectedColor = 3;
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(20),
+      ),
+      child: Row(
+        children: [
+          ...List.generate(
+            product.colors.length,
+            (index) => ColorDot(
+              color: product.colors[index],
+              isSelected: selectedColor == index,
+            ),
           ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ...List.generate(widget.product.images.length,
-                (index) => buildSmallPreview(index))
-          ],
-        )
-      ],
+        ],
+      ),
     );
   }
+}
 
-  GestureDetector buildSmallPreview(int index) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedImage = index;
-        });
-      },
-      child: Container(
-        margin: EdgeInsets.only(right: getProportionateScreenWidth(15)),
-        padding: EdgeInsets.all(getProportionateScreenHeight(8)),
-        height: getProportionateScreenWidth(48),
-        width: getProportionateScreenWidth(48),
+class ColorDot extends StatelessWidget {
+  const ColorDot({
+    Key? key,
+    required this.color,
+    this.isSelected = false,
+  }) : super(key: key);
+
+  final Color color;
+  final bool isSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(right: 2),
+      padding: EdgeInsets.all(8),
+      height: getProportionateScreenWidth(40),
+      width: getProportionateScreenWidth(40),
+      decoration: BoxDecoration(
+        // color: product.colors[0],
+        shape: BoxShape.circle,
+        border:
+            Border.all(color: isSelected ? kPrimaryColor : Colors.transparent),
+      ),
+      child: DecoratedBox(
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-                color: selectedImage == index
-                    ? kPrimaryColor
-                    : Colors.transparent)),
-        child: Image.asset(widget.product.images[index]),
+          color: color,
+          shape: BoxShape.circle,
+        ),
       ),
     );
   }
