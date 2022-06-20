@@ -26,7 +26,7 @@ class _ProductImagesState extends State<ProductImages> {
           width: getProportionateScreenWidth(238),
           child: AspectRatio(
             aspectRatio: 1,
-            child: Image.asset(widget.product.images[0]),
+            child: Image.asset(widget.product.images[selectedImage]),
           ),
         ),
         Row(
